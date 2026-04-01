@@ -1,0 +1,9 @@
+User-agent: *
+Allow: /
+
+# Block internal job and API routes from indexing
+Disallow: /progress/
+Disallow: /preview/
+Disallow: /studio
+
+Sitemap: https://audio2video.uk/sitemap.xml

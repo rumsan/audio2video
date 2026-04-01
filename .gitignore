@@ -1,0 +1,16 @@
+.env
+cache/
+output/
+frontend-dist/
+__pycache__/
+**/__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.Python
+.venv/
+venv/
+*.egg-info/
+dist/
+build/
+.DS_Store

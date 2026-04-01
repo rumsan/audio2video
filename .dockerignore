@@ -1,0 +1,24 @@
+**/__pycache__
+**/*.pyc
+**/*.pyo
+**/*.pyd
+
+.git
+.gitignore
+.env
+.env.*
+
+# Dev/local artifacts
+cache/
+output/
+slack/
+
+# Frontend build artifacts and deps
+frontend/node_modules/
+frontend-dist/
+frontend/.env
+frontend/tsconfig.tsbuildinfo
+
+# Python venv if any
+.venv/
+venv/

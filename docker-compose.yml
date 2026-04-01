@@ -1,0 +1,34 @@
+services:
+  # ─── Production: API + built frontend served together ───────────────────────
+  api:
+    image: rumsan/audio2video:latest
+    platform: linux/amd64
+    ports:
+      - "${PORT:-8000}:8000"
+    environment:
+      - API_KEY=${API_KEY:-changeme}
+      - BASE_URL=${BASE_URL:-http://localhost:8000}
+      - CACHE_DIR=cache
+      - OUTPUT_DIR=output
+    volumes:
+      - ./cache:/app/cache
+      - ./output:/app/output
+    restart: unless-stopped
+
+  # ─── Dev: Vite frontend dev server (hot-reload) ──────────────────────────────
+  # Proxies /convert /jobs /files /cache to the api service.
+  # Usage:  docker-compose --profile dev up
+  # frontend-dev:
+  #   profiles: [dev]
+  #   image: node:20-alpine
+  #   working_dir: /app
+  #   command: sh -c "npm install && npm run dev -- --host"
+  #   ports:
+  #     - "5173:5173"
+  #   volumes:
+  #     - ./frontend:/app
+  #   environment:
+  #     - VITE_API_KEY=${API_KEY:-changeme}
+  #     - VITE_API_BASE_URL=
+  #   depends_on:
+  #     - api

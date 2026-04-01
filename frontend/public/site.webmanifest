@@ -1,0 +1,21 @@
+{
+  "name": "Audio2Video",
+  "short_name": "Audio2Video",
+  "description": "The easiest way to convert audio to YouTube and Facebook video with timed slides and chapter markers.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#e0f2fe",
+  "theme_color": "#0ea5e9",
+  "icons": [
+    {
+      "src": "/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ]
+}
