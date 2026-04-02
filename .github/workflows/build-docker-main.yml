@@ -1,0 +1,58 @@
+name: Build and Push Docker Image (Main)
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  build-and-push:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      id-token: write
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Import secrets from Vault
+        uses: hashicorp/vault-action@v2.4.0
+        with:
+          url: ${{ secrets.VAULT_ADDR }}
+          method: jwt
+          role: ${{ secrets.VAULT_ROLE }}
+          path: jwt
+          jwtAudience: ${{ secrets.VAULT_ADDR }}
+          secrets: |
+            secret/data/audio2video/main dockerhub_username | DOCKERHUB_USERNAME;
+            secret/data/audio2video/main dockerhub_token | DOCKERHUB_TOKEN;
+            secret/data/audio2video/main api_key | API_KEY;
+            secret/data/audio2video/main base_url | BASE_URL;
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Login to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ env.DOCKERHUB_USERNAME }}
+          password: ${{ env.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          platforms: linux/amd64,linux/arm64
+          push: true
+          tags: |
+            ${{ env.DOCKERHUB_USERNAME }}/audio2video:latest
+            ${{ env.DOCKERHUB_USERNAME }}/audio2video:${{ github.sha }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+          build-args: |
+            API_KEY=${{ env.API_KEY }}
+            BASE_URL=${{ env.BASE_URL }}
+
+      - name: Image digest
+        run: echo ${{ steps.docker_build.outputs.digest }}
